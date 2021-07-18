@@ -12,3 +12,6 @@ gitingore:
 4. Будут игнорироваться все файлы с расширением "tfvars";
 5. Будут игнорироваться файлы "override.tf", "override.tf.json" и файлы, подходящие под маски "*_override.tf", "*_override.tf.json";
 6. Будут игнорироваться файлы ".terraformrc", "terraform.rc".
+
+
+New line in README.md for new branch

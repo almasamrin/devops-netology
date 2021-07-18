@@ -15,3 +15,7 @@ gitingore:
 
 
 New line in README.md for new branch
+
+## Задание по git
+
+1. Новая строка для коммита

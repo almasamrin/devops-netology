@@ -1,23 +1,13 @@
-1. Нашел только 1 строку:
+1. Системный вызов chdir:
 ```
-strace /bin/bash -c 'cd /tmp' 2>&1 | grep cd
-execve("/bin/bash", ["/bin/bash", "-c", "cd /tmp"], 0x7ffd20aa5a20 /* 27 vars */) = 0
-```
-
-Писали, что "запустить strace непосредственно на cd не получится", но у меня через cd тоже получилось. И даже строчок исполнения команды больше:
-```
-strace cd test_dir 2>&1 | grep cd #strace cd 2>&1 | grep cd - почему-то не отличаются результаты
-execve("/bin/cd", ["cd", "test_dir"], 0x7ffcc589c9f8 /* 27 vars */) = 0
-open("/bin/cd", O_RDONLY)               = 3
-read(3, "#!/bin/sh\nbuiltin cd \"$@\"\n", 80) = 26
-read(255, "#!/bin/sh\nbuiltin cd \"$@\"\n", 26) = 26
+chdir("/tmp")                           = 0
 ```
 
 2. Файл "/usr/share/misc/magic.mgc":
 
-3. Команда для очистки файла log30_12_2021.txt:
+3. Команда для очистки удаленного файла log30_12_2021.txt:
 ```
-sudo cat /dev/null > log30_12_2021.txt
+sudo cat /dev/null > log30_12_2021.txt (deleted)
 ```
 
 4. Зомби процессы занимают ресурсы. Они ушли в бесконечное исполнение, но остановки приложения для высвобождения ресурсов не произошло.

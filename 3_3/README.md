@@ -13,7 +13,7 @@ lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing
 vi      8162 vagrant    4u   REG  253,0    12288 131088 /home/vagrant/.test23.txt.swp
 ```
 
-#Скринт очистки:
+# Скрипт очистки:
 ```
 sudo cat /dev/null > /proc/8162/fd/4
 ```

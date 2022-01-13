@@ -5,9 +5,17 @@ chdir("/tmp")                           = 0
 
 2. Файл "/usr/share/misc/magic.mgc":
 
-3. Команда для очистки удаленного файла log30_12_2021.txt:
+3. Команда для очистки файла test23.txt, открытого в другой сессии (не смог добиться добавления принзана "(deleted)"):
 ```
-sudo cat /dev/null > log30_12_2021.txt (deleted)
+vagrant@vagrant:~$ lsof -p 8162 | grep test23
+lsof: WARNING: can't stat() tracefs file system /sys/kernel/debug/tracing
+      Output information may be incomplete.
+vi      8162 vagrant    4u   REG  253,0    12288 131088 /home/vagrant/.test23.txt.swp
+```
+
+#Скринт очистки:
+```
+sudo cat /dev/null > /proc/8162/fd/4
 ```
 
 4. Зомби процессы занимают ресурсы. Они ушли в бесконечное исполнение, но остановки приложения для высвобождения ресурсов не произошло.
@@ -51,6 +59,11 @@ command1 && command2 - command2 is executed if, and only if, command1 returns an
 command1; command2 - Команды исполняются последовательно, при этом результаты вызова command1 не влияет на вызов command2.
 
 При использовании set -e разницы в результате использования "&&" и ";" нет, так как при не нулевом ответе происходит выход из скрипта.
+
+#1 Замечание эксперта:
+С параметром -e оболочка завершится только при ненулевом коде возврата простой команды. Если ошибочно завершится одна из команд, разделённых &&, то выхода из шелла не произойдёт. Так что, смысл есть.
+В man это поведение описано:
+The shell does not exit if the command that fails is . . . part of any command executed in a && or || list except the command following the final &&
 
 8. set -euxo pipefail
 -e: Программа/скрипт завершается при любом ошибочном испорнении команд, если скрипт выдал ошибку не внутри: while/until/if/AND/OR.

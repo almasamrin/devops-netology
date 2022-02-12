@@ -5,6 +5,7 @@
 Жесткие ссылки имею одинаковые права и владельца, так как это указатель/интерфейс на один и тот же файл.
 
 # 3.
+```
 vagrant destroy
 
 Vagrant.configure("2") do |config|
@@ -21,10 +22,13 @@ Vagrant.configure("2") do |config|
 		vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', lvm_experiments_disk1_path]
   end
  end
+
 vagrant up
 vagrant ssh
+```
 
 # 4. 
+```
 vagrant@vagrant:/dev$ sudo fdisk /dev/sdb
 
 Command (m for help): F
@@ -75,8 +79,10 @@ Command (m for help): w
 The partition table has been altered.
 Calling ioctl() to re-read partition table.
 Syncing disks.
+```
 
 # 5. 
+```
 sudo sfdisk -d /dev/sdb | sudo sfdisk /dev/sdc
 
 Disk /dev/sdc: 2.51 GiB, 2684354560 bytes, 5242880 sectors
@@ -105,14 +111,19 @@ Device     Boot   Start     End Sectors  Size Id Type
 The partition table has been altered.
 Calling ioctl() to re-read partition table.
 Syncing disks.
+```
 
 # 6. 
+```
 sudo mdadm --create --verbose /dev/md1 --level=mirror --raid-devices=2 /dev/sdb1 /dev/sdc1 --metadata=0.90
+```
 mdadm: size set to 2097088K
 mdadm: array /dev/md1 started.
 
 # 7.
+```
 sudo mdadm --create --verbose /dev/md2 --level=0 --raid-devices=2 /dev/sdb2 /dev/sdc2
+```
 mdadm: chunk size defaults to 512K
 mdadm: partition table exists on /dev/sdb2
 mdadm: partition table exists on /dev/sdb2 but will be lost or
@@ -122,23 +133,31 @@ mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md2 started.
 
 # 8.
+```
 sudo pvcreate /dev/md1
   Physical volume "/dev/md1" successfully created.
 sudo pvcreate /dev/md2
   Physical volume "/dev/md2" successfully created.
+```
 
 # 9.
+```
 sudo vgcreate vgmd1 /dev/md1 /dev/md2
   Volume group "vgmd1" successfully created
+```
 
 # 10.
+```
 sudo lvcreate -n my_custom_lv -L 100M vgmd1 /dev/md2
+```
   Logical volume "my_custom_lv" created.
 
 # 11.
+```
 sudo mkfs.ext4 -F /dev/vgmd1/my_custom_lv
 mke2fs 1.45.5 (07-Jan-2020)
 Creating filesystem with 25600 4k blocks and 25600 inodes
+```
 
 Allocating group tables: done
 Writing inode tables: done
@@ -153,6 +172,7 @@ sudo mount /dev/vgmd1/my_custom_lv /mnt/vgmd1/my_custom_lv
 ```
 
 # 13.
+```
 sudo wget https://mirror.yandex.ru/ubuntu/ls-lR.gz -O /mnt/vgmd1/my_custom_lv/test.gz
 --2022-02-11 17:19:39--  https://mirror.yandex.ru/ubuntu/ls-lR.gz
 Resolving mirror.yandex.ru (mirror.yandex.ru)... 213.180.204.183, 2a02:6b8::183
@@ -164,8 +184,10 @@ Saving to: ‘/mnt/vgmd1/my_custom_lv/test.gz’
 /mnt/vgmd1/my_custom_lv/test.gz                             100%[========================================================================================================================================>]  21.25M  1.90MB/s    in 18s
 
 2022-02-11 17:19:57 (1.20 MB/s) - ‘/mnt/vgmd1/my_custom_lv/test.gz’ saved [22278842/22278842]
+```
 
 # 14.
+```
 lsblk
 NAME                      MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
 loop0                       7:0    0 32.3M  1 loop  /snap/snapd/12704
@@ -192,17 +214,23 @@ sdc                         8:32   0  2.5G  0 disk
 └─sdc2                      8:34   0  511M  0 part
   └─md2                     9:2    0 1018M  0 raid0
     └─vgmd1-my_custom_lv  253:1    0  100M  0 lvm   /mnt/vgmd1/my_custom_lv
+```
 
 # 15.
+```
 vagrant@vagrant:~$ gzip -t /mnt/vgmd1/my_custom_lv/test.gz
 vagrant@vagrant:~$ echo $?
+```
 0
 
 # 16.
+```
 sudo pvmove /dev/md2 /dev/md1
   /dev/md2: Moved: 12.00%
   /dev/md2: Moved: 100.00%
+```
 
+```
 lsblk
 NAME                      MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
 loop0                       7:0    0 32.3M  1 loop  /snap/snapd/12704
@@ -229,19 +257,29 @@ sdc                         8:32   0  2.5G  0 disk
 │   └─vgmd1-my_custom_lv  253:1    0  100M  0 lvm   /mnt/vgmd1/my_custom_lv
 └─sdc2                      8:34   0  511M  0 part
   └─md2                     9:2    0 1018M  0 raid0
+```
 
 # 17.
+```
 sudo mdadm --fail /dev/md1 /dev/sdc1
 mdadm: set /dev/sdc1 faulty in /dev/md1
+```
 
 # 18.
+```
 dmesg
 md/raid1:md1: Disk failure on sdc1, disabling device.
 md/raid1:md1: Operation continuing on 1 devices.
+```
 
 # 19.
+```
 vagrant@vagrant:~$ gzip -t /mnt/vgmd1/my_custom_lv/test.gz
 vagrant@vagrant:~$ echo $?
 0
+```
 
 # 20.
+```
+vagrant destroy
+```

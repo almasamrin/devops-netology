@@ -1,4 +1,5 @@
 # 1.
+```
 vagrant@vagrant:~$ telnet stackoverflow.com 80
 Trying 151.101.129.69...
 Connected to stackoverflow.com.
@@ -25,6 +26,7 @@ X-DNS-Prefetch-Control: off
 Set-Cookie: prov=d3bbb19e-d721-e5b3-5b5b-ca3f64a4d235; domain=.stackoverflow.com; expires=Fri, 01-Jan-2055 00:00:00 GMT; path=/; HttpOnly
 
 Connection closed by foreign host.
+```
 
 HTTP код ответа 301 - страница куда-то переехала.
 Только не понял почему 301, сама ссылка достуна. Дело в порте 443?

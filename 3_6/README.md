@@ -39,7 +39,7 @@ https://stackoverflow.com/
 либо 
 collect (Если не учитывать первый).
 
-[Скриншот консоли](https://github.com/almasamrin/devops-netology/blob/main/3_6_HW/3_6_2.jpg)
+[Скриншот консоли](https://github.com/almasamrin/devops-netology/blob/main/3_6/3_6_2.jpg)
 
 # 3.
 37.99.46.___ - из https://whoer.net/ (адрес скрыл)
